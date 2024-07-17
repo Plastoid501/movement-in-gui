@@ -23,8 +23,8 @@ public class ClientPlayerEntityMixin {
         if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
             return false;
         }
-        KeyBinding.setKeyPressed(key, true);
-        KeyBinding.onKeyPressed(key);
+        //KeyBinding.setKeyPressed(key, true);
+        //KeyBinding.onKeyPressed(key);
 
         return true;
     }
