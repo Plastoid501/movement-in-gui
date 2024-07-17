@@ -20,7 +20,7 @@ public class KeyboardInputMixin {
             return false;
         }
         InputUtil.KeyCode key = ((IKeyBindingMixin) instance).getKeyCode();
-        if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getKeyCode())) {
+        if (!InputUtil.isKeyPressed(client.window.getHandle(), key.getKeyCode())) {
             return false;
         }
         KeyBinding.setKeyPressed(key, true);
