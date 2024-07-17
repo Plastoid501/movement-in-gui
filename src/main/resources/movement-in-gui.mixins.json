@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "net.plastoid501.movement.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "ClientPlayerEntityMixin",
+    "IKeyBindingMixin",
+    "KeyboardInputMixin"
+  ]
+}
