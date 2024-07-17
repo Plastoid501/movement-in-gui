@@ -23,7 +23,7 @@
 		"movement-in-gui.mixins.json"
 	],
 	"depends": {
-		"minecraft": "1.16.x"
+		"minecraft": "1.15.x"
 	},
 	"suggests": {
 		"another-mod": "*"

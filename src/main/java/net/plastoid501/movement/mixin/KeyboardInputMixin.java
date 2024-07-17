@@ -2,7 +2,7 @@ package net.plastoid501.movement.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KeyboardInput.class)
 public class KeyboardInputMixin {
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"))
     private boolean modifyTick(KeyBinding instance) {
         if (instance.isPressed()) {
             return true;
@@ -19,8 +19,8 @@ public class KeyboardInputMixin {
         if (client.currentScreen == null) {
             return false;
         }
-        InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
-        if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
+        InputUtil.KeyCode key = ((IKeyBindingMixin) instance).getKeyCode();
+        if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getKeyCode())) {
             return false;
         }
         KeyBinding.setKeyPressed(key, true);
