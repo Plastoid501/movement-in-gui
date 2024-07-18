@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"net.plastoid501.movement.MovementInGUI"
+		],
+		"modmenu": [
+			"net.plastoid501.movement.gui.ModMenuIntegration"
 		]
 	},
 	"mixins": [
