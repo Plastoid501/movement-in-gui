@@ -1,7 +1,13 @@
 package net.plastoid501.movement.mixin;
 
+import com.terraformersmc.modmenu.gui.ModsScreen;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
+import net.minecraft.client.gui.screen.option.GameOptionsScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.gui.screen.option.TelemetryInfoScreen;
+import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -21,7 +27,20 @@ public class KeyboardInputMixin {
             return false;
         }
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.currentScreen == null || client.currentScreen instanceof ChatScreen) {
+        if (client.currentScreen == null ||
+                client.currentScreen instanceof ChatScreen ||
+                client.currentScreen instanceof GameOptionsScreen ||
+                client.currentScreen instanceof GameMenuScreen ||
+                client.currentScreen instanceof OptionsScreen ||
+                client.currentScreen instanceof TelemetryInfoScreen ||
+                client.currentScreen instanceof StatsScreen ||
+                client.currentScreen instanceof OpenToLanScreen ||
+                client.currentScreen instanceof ConfirmLinkScreen ||
+                client.currentScreen instanceof PackScreen ||
+                client.currentScreen instanceof CreditsAndAttributionScreen ||
+                client.currentScreen instanceof CreditsScreen ||
+                client.currentScreen instanceof ModsScreen
+        ) {
             return false;
         }
         if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
@@ -31,6 +50,8 @@ public class KeyboardInputMixin {
         if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
             return false;
         }
+        KeyBinding.setKeyPressed(key, true);
+        KeyBinding.onKeyPressed(key);
 
         return true;
     }
