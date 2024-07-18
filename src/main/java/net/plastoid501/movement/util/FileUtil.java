@@ -87,6 +87,8 @@ public class FileUtil {
         } catch (IOException e) {
             MovementInGUI.LOGGER.error(e.getMessage());
         }
+
+        FileUtil.updateConfigs();
     }
 
     public static void updateToggleConfig(String target, JToggleConfig toggle) {
