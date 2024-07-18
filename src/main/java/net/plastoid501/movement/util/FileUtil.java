@@ -105,11 +105,19 @@ public class FileUtil {
 
             boolean flag = false;
 
-            JToggleConfig toggleConfig = config.getToggles().get(Configs.inCreative.getId());
+            JToggleConfig toggleConfig = config.getToggles().get(Configs.modEnable.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.modEnable.isEnable());
+                config.getToggles().put(Configs.modEnable.getId(), toggleConfig);
+            }
+            Configs.modEnable = new ToggleConfig(Configs.modEnable.getId(), Configs.modEnable.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.inCreative.getId());
             if (toggleConfig == null) {
                 flag = true;
                 toggleConfig = new JToggleConfig(Configs.inCreative.isEnable());
-                config.getToggles().put("inCreative", toggleConfig);
+                config.getToggles().put(Configs.inCreative.getId(), toggleConfig);
             }
             Configs.inCreative = new ToggleConfig(Configs.inCreative.getId(), Configs.inCreative.getNarrator(), toggleConfig.isEnable());
 
