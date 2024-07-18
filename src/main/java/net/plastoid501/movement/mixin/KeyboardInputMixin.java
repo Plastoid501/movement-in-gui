@@ -1,9 +1,11 @@
 package net.plastoid501.movement.mixin;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.plastoid501.movement.config.Configs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,16 +17,20 @@ public class KeyboardInputMixin {
         if (instance.isPressed()) {
             return true;
         }
+        if (!Configs.modEnable.isEnable()) {
+            return false;
+        }
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.currentScreen == null) {
+        if (client.currentScreen == null || client.currentScreen instanceof ChatScreen) {
+            return false;
+        }
+        if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
             return false;
         }
         InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
         if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
             return false;
         }
-        //KeyBinding.setKeyPressed(key, true);
-        //KeyBinding.onKeyPressed(key);
 
         return true;
     }
