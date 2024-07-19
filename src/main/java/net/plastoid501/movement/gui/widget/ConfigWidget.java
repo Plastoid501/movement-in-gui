@@ -64,13 +64,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        if (this.client == null || this.client.player == null || this.client.world == null) {
-            this.method_31322(true);
-        } else {
-            this.method_31322(false);
-        }
-        super.render(matrices, mouseX, mouseY, delta);
+    public void renderBackground(MatrixStack matrices) {
     }
 
     public class CategoryEntry extends Entry {

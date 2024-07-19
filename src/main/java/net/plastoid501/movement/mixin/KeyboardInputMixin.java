@@ -1,22 +1,23 @@
 package net.plastoid501.movement.mixin;
 
-import com.terraformersmc.modmenu.gui.ModsScreen;
+import io.github.prospector.modmenu.gui.ModsScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.gui.screen.options.GameOptionsScreen;
+import net.minecraft.client.gui.screen.options.OptionsScreen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.plastoid501.movement.config.Configs;
+import net.plastoid501.movement.gui.ConfigScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KeyboardInput.class)
 public class KeyboardInputMixin {
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"))
     private boolean modifyTick(KeyBinding instance) {
         if (instance.isPressed()) {
             return true;
@@ -33,11 +34,12 @@ public class KeyboardInputMixin {
                 //client.currentScreen instanceof TelemetryInfoScreen ||
                 client.currentScreen instanceof StatsScreen ||
                 client.currentScreen instanceof OpenToLanScreen ||
-                //client.currentScreen instanceof ConfirmLinkScreen ||
+                client.currentScreen instanceof ConfirmScreen ||
                 client.currentScreen instanceof PackScreen ||
                 //client.currentScreen instanceof CreditsAndAttributionScreen ||
                 client.currentScreen instanceof CreditsScreen ||
-                client.currentScreen instanceof ModsScreen
+                client.currentScreen instanceof ModsScreen ||
+                client.currentScreen instanceof ConfigScreen
         ) {
             return false;
         }
