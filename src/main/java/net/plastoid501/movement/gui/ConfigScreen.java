@@ -12,7 +12,7 @@ public class ConfigScreen extends Screen {
     private final Screen parent;
 
     public ConfigScreen(Screen parent) {
-        super(Text.of("Movement In GUI"));
+        super(Text.method_30163("Movement In GUI"));
         this.parent = parent;
     }
 

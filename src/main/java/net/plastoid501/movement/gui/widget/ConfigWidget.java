@@ -40,9 +40,9 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
 
     private void initEntries(MinecraftClient client) {
         if (CONFIG != null) {
-            this.addEntry(new CategoryEntry(Text.of("-- Toggle --"), client.textRenderer));
+            this.addEntry(new CategoryEntry(Text.method_30163("-- Toggle --"), client.textRenderer));
             Configs.getToggles().keySet().forEach((key) -> this.addEntry(new ToggleEntry(key, client.textRenderer, CONFIG)));
-            this.addEntry(new CategoryEntry(Text.of(""), client.textRenderer));
+            this.addEntry(new CategoryEntry(Text.method_30163(""), client.textRenderer));
         }
     }
 
@@ -107,14 +107,14 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
             this.textRenderer = textRenderer;
             this.defaultConfig = Configs.getToggles().get(key);
             this.enable = config.getToggles().get(key).isEnable();
-            this.text = Text.of(key);
+            this.text = Text.method_30163(key);
             //this.text.setTooltip(Tooltip.of(Text.literal(this.defaultConfig.getNarrator())));
-            this.enableButton = new ButtonWidget(0, 0, 60, 20, Text.of(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))), button -> {
+            this.enableButton = new ButtonWidget(0, 0, 60, 20, Text.method_30163(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))), button -> {
                 this.enable = !this.enable;
                 FileUtil.updateToggleConfig(key, new JToggleConfig(this.enable));
                 this.update();
             });
-            this.resetButton = new ButtonWidget(0, 0, 40, 20, Text.of("RESET"), button -> {
+            this.resetButton = new ButtonWidget(0, 0, 40, 20, Text.method_30163("RESET"), button -> {
                 this.enable = this.defaultConfig.isEnable();
                 FileUtil.updateToggleConfig(key, new JToggleConfig(this.enable));
                 this.update();
@@ -141,7 +141,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
 
         @Override
         void update() {
-            this.enableButton.setMessage(Text.of(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))));
+            this.enableButton.setMessage(Text.method_30163(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))));
             this.resetButton.active = this.defaultConfig.isEnable() != this.enable;
         }
 
