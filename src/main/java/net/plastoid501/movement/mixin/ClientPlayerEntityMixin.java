@@ -1,6 +1,6 @@
 package net.plastoid501.movement.mixin;
 
-import io.github.prospector.modmenu.gui.ModsScreen;
+import io.github.prospector.modmenu.gui.ModListScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.screen.options.GameOptionsScreen;
@@ -37,7 +37,7 @@ public class ClientPlayerEntityMixin {
                 client.currentScreen instanceof ResourcePackOptionsScreen ||
                 //client.currentScreen instanceof CreditsAndAttributionScreen ||
                 client.currentScreen instanceof CreditsScreen ||
-                client.currentScreen instanceof ModsScreen ||
+                client.currentScreen instanceof ModListScreen ||
                 client.currentScreen instanceof ConfigScreen
         ) {
             return false;
