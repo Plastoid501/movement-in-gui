@@ -3,7 +3,6 @@ package net.plastoid501.movement.mixin;
 import com.terraformersmc.modmenu.gui.ModsScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.option.TelemetryInfoScreen;
@@ -38,7 +37,7 @@ public class ClientPlayerEntityMixin {
                 client.currentScreen instanceof OpenToLanScreen ||
                 client.currentScreen instanceof ConfirmLinkScreen ||
                 client.currentScreen instanceof PackScreen ||
-                client.currentScreen instanceof CreditsAndAttributionScreen ||
+                //client.currentScreen instanceof CreditsAndAttributionScreen ||
                 client.currentScreen instanceof CreditsScreen ||
                 client.currentScreen instanceof ModsScreen
         ) {
