@@ -20,9 +20,9 @@ public class ConfigScreen extends Screen {
     protected void init() {
         this.configList = new ConfigWidget(this, this.client);
         this.addSelectableChild(this.configList);
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, (button) -> {
             this.close();
-        }).dimensions(this.width / 2 - 100, this.height - 27, 200, 20).build());
+        }));
     }
 
     @Override

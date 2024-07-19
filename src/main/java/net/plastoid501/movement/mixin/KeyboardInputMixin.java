@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.screen.option.TelemetryInfoScreen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.KeyBinding;
@@ -31,7 +30,7 @@ public class KeyboardInputMixin {
                 client.currentScreen instanceof GameOptionsScreen ||
                 client.currentScreen instanceof GameMenuScreen ||
                 client.currentScreen instanceof OptionsScreen ||
-                client.currentScreen instanceof TelemetryInfoScreen ||
+                //client.currentScreen instanceof TelemetryInfoScreen ||
                 client.currentScreen instanceof StatsScreen ||
                 client.currentScreen instanceof OpenToLanScreen ||
                 client.currentScreen instanceof ConfirmLinkScreen ||
