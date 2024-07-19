@@ -33,7 +33,7 @@ public class ClientPlayerEntityMixin {
                 //client.currentScreen instanceof TelemetryInfoScreen ||
                 client.currentScreen instanceof StatsScreen ||
                 client.currentScreen instanceof OpenToLanScreen ||
-                //client.currentScreen instanceof ConfirmLinkScreen ||
+                client.currentScreen instanceof ConfirmScreen ||
                 client.currentScreen instanceof PackScreen ||
                 //client.currentScreen instanceof CreditsAndAttributionScreen ||
                 client.currentScreen instanceof CreditsScreen ||
