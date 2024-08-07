@@ -17,8 +17,10 @@ public class Configs {
     static {
         toggles.put(modEnable.getId(), modEnable);
         toggles.put(inCreative.getId(), inCreative);
+        toggles.put(isAnvil.getId(), isAnvil);
         jToggles.put(modEnable.getId(), new JToggleConfig(modEnable.isEnable()));
         jToggles.put(inCreative.getId(), new JToggleConfig(inCreative.isEnable()));
+        jToggles.put(isAnvil.getId(), new JToggleConfig(isAnvil.isEnable()));
 
         config = new ModConfig(jToggles);
 
