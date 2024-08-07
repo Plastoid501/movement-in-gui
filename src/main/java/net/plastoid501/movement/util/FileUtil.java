@@ -123,6 +123,14 @@ public class FileUtil {
             }
             Configs.inCreative = new ToggleConfig(Configs.inCreative.getId(), Configs.inCreative.getNarrator(), toggleConfig.isEnable());
 
+            toggleConfig = config.getToggles().get(Configs.isAnvil.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.isAnvil.isEnable());
+                config.getToggles().put(Configs.isAnvil.getId(), toggleConfig);
+            }
+            Configs.isAnvil = new ToggleConfig(Configs.isAnvil.getId(), Configs.isAnvil.getNarrator(), toggleConfig.isEnable());
+
             if (flag) {
                 return;
             }

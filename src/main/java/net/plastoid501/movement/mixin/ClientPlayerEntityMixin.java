@@ -3,6 +3,9 @@ package net.plastoid501.movement.mixin;
 import com.terraformersmc.modmenu.gui.ModsScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.ingame.AnvilScreen;
+import net.minecraft.client.gui.screen.ingame.BookEditScreen;
+import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -28,6 +31,9 @@ public class ClientPlayerEntityMixin {
         }
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.currentScreen == null ||
+                client.currentScreen instanceof BookEditScreen ||
+                client.currentScreen instanceof SignEditScreen ||
+                (client.currentScreen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
                 client.currentScreen instanceof ChatScreen ||
                 client.currentScreen instanceof GameOptionsScreen ||
                 client.currentScreen instanceof GameMenuScreen ||

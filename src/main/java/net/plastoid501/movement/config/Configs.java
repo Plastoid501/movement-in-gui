@@ -10,6 +10,7 @@ public class Configs {
 
     public static ToggleConfig modEnable = new ToggleConfig("modEnable", "If true, this mod is enable", true);
     public static ToggleConfig inCreative = new ToggleConfig("inCreative", "If true, this mod is enable when creative mode.", true);
+    public static ToggleConfig isAnvil = new ToggleConfig("inCreative", "If true, this mod is enable when open anvil screen.", true);
 
     public static ModConfig config;
 
