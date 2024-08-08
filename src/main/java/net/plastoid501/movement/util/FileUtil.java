@@ -102,6 +102,7 @@ public class FileUtil {
         ModConfig config = FileUtil.readConfig();
         if (config != null) {
             if (config.getToggles() == null) {
+                saveConfig(Configs.config);
                 return;
             }
 
@@ -132,6 +133,7 @@ public class FileUtil {
             Configs.isAnvil = new ToggleConfig(Configs.isAnvil.getId(), Configs.isAnvil.getNarrator(), toggleConfig.isEnable());
 
             if (flag) {
+                saveConfig(config);
                 return;
             }
             Configs.config = config;
