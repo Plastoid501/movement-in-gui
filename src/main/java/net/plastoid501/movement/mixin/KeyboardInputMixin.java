@@ -52,6 +52,9 @@ public class KeyboardInputMixin {
         if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
             return false;
         }
+        if (!Configs.isMultiplayer.isEnable() && !client.isInSingleplayer()) {
+            return false;
+        }
         InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
         if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
             return false;

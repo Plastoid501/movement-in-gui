@@ -131,6 +131,14 @@ public class FileUtil {
             }
             Configs.isAnvil = new ToggleConfig(Configs.isAnvil.getId(), Configs.isAnvil.getNarrator(), toggleConfig.isEnable());
 
+            toggleConfig = config.getToggles().get(Configs.isMultiplayer.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.isMultiplayer.isEnable());
+                config.getToggles().put(Configs.isMultiplayer.getId(), toggleConfig);
+            }
+            Configs.isMultiplayer = new ToggleConfig(Configs.isMultiplayer.getId(), Configs.isMultiplayer.getNarrator(), toggleConfig.isEnable());
+
             if (flag) {
                 return;
             }
