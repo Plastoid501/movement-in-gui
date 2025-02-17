@@ -56,6 +56,9 @@ public class KeyboardInputMixin {
         if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
             return false;
         }
+        if (!Configs.isMultiplayer.isEnable() && !client.isInSingleplayer()) {
+            return false;
+        }
         KeyBinding.setKeyPressed(key, true);
         KeyBinding.onKeyPressed(key);
 
