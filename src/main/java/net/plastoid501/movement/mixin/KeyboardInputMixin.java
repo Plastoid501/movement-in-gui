@@ -3,6 +3,9 @@ package net.plastoid501.movement.mixin;
 import io.github.prospector.modmenu.gui.ModListScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.ingame.AnvilScreen;
+import net.minecraft.client.gui.screen.ingame.BookEditScreen;
+import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.client.gui.screen.options.GameOptionsScreen;
 import net.minecraft.client.gui.screen.resourcepack.ResourcePackOptionsScreen;
 import net.minecraft.client.input.KeyboardInput;
@@ -26,6 +29,9 @@ public class KeyboardInputMixin {
         }
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.currentScreen == null ||
+                client.currentScreen instanceof BookEditScreen ||
+                client.currentScreen instanceof SignEditScreen ||
+                (client.currentScreen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
                 client.currentScreen instanceof ChatScreen ||
                 client.currentScreen instanceof GameOptionsScreen ||
                 client.currentScreen instanceof GameMenuScreen ||
@@ -43,6 +49,9 @@ public class KeyboardInputMixin {
             return false;
         }
         if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
+            return false;
+        }
+        if (!Configs.isMultiplayer.isEnable() && !client.isInSingleplayer()) {
             return false;
         }
         InputUtil.KeyCode key = ((IKeyBindingMixin) instance).getKeyCode();
