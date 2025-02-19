@@ -1,58 +1,51 @@
+/*
+ * This file is part of the MovementInGUI project, licensed under the
+ * GNU Lesser General Public License v3.0
+ *
+ * Copyright (C) 2025  Plastoid501 and contributors
+ *
+ * MovementInGUI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MovementInGUI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MovementInGUI.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 package net.plastoid501.movement.mixin;
 
-import com.terraformersmc.modmenu.gui.ModsScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.screen.option.TelemetryInfoScreen;
-import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+//#if MC > 11603
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.plastoid501.movement.config.Configs;
+//#else
+//$$ import net.minecraft.client.options.KeyBinding;
+//#endif
+import net.plastoid501.movement.util.ClientUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"))
+    @Redirect(
+            method = "tickMovement",
+            at = @At(
+                    value = "INVOKE",
+                    //#if MC > 11603
+                    target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"
+                    //#else
+                    //$$ target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
+                    //#endif
+            )
+    )
     private boolean modifyTickMovement(KeyBinding instance) {
-        if (instance.isPressed()) {
-            return true;
-        }
-        if (!Configs.modEnable.isEnable()) {
-            return false;
-        }
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.currentScreen == null ||
-                client.currentScreen instanceof ChatScreen ||
-                client.currentScreen instanceof GameOptionsScreen ||
-                client.currentScreen instanceof GameMenuScreen ||
-                client.currentScreen instanceof OptionsScreen ||
-                client.currentScreen instanceof TelemetryInfoScreen ||
-                client.currentScreen instanceof StatsScreen ||
-                client.currentScreen instanceof OpenToLanScreen ||
-                client.currentScreen instanceof ConfirmLinkScreen ||
-                client.currentScreen instanceof PackScreen ||
-                client.currentScreen instanceof CreditsAndAttributionScreen ||
-                client.currentScreen instanceof CreditsScreen ||
-                client.currentScreen instanceof ModsScreen
-        ) {
-            return false;
-        }
-        if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
-            return false;
-        }
-        InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
-        if (!InputUtil.isKeyPressed(client.getWindow().getHandle(), key.getCode())) {
-            return false;
-        }
-        KeyBinding.setKeyPressed(key, true);
-        KeyBinding.onKeyPressed(key);
-
-        return true;
+        return ClientUtil.test(instance);
     }
 }

@@ -1,34 +1,35 @@
 {
-	"schemaVersion": 1,
-	"id": "movement-in-gui",
-	"version": "${version}",
-	"name": "Movement In GUI",
-	"description": "This mod allows you to move even when the GUI is open.",
-	"authors": [
-		"Plastoid501"
-	],
-	"contact": {
-		"homepage": "https://github.com/Plastoid501/",
-		"sources": "https://github.com/Plastoid501/movement-in-gui"
-	},
-	"license": "MIT",
-	"icon": "assets/movement-in-gui/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"net.plastoid501.movement.MovementInGUI"
-		],
-		"modmenu": [
-			"net.plastoid501.movement.gui.ModMenuIntegration"
-		]
-	},
-	"mixins": [
-		"movement-in-gui.mixins.json"
-	],
-	"depends": {
-		"minecraft": ">=1.21"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+
+  "name": "${name}",
+  "description": "This mod allows you to move even when the GUI is open.",
+  "authors": [
+    "Plastoid501"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Plastoid501/",
+    "sources": "https://github.com/Plastoid501/movement-in-gui"
+  },
+
+  "icon": "assets/movement-in-gui/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.plastoid501.movement.MovementInGUI"
+    ],
+    "modmenu": [
+      "net.plastoid501.movement.gui.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "movement-in-gui.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.4",
+    "minecraft": "${minecraft_dependency}"
+  }
 }

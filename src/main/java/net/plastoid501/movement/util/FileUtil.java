@@ -1,3 +1,23 @@
+/*
+ * This file is part of the MovementInGUI project, licensed under the
+ * GNU Lesser General Public License v3.0
+ *
+ * Copyright (C) 2025  Plastoid501 and contributors
+ *
+ * MovementInGUI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MovementInGUI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MovementInGUI.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.plastoid501.movement.util;
 
 import com.google.gson.Gson;
@@ -102,6 +122,7 @@ public class FileUtil {
         ModConfig config = FileUtil.readConfig();
         if (config != null) {
             if (config.getToggles() == null) {
+                saveConfig(Configs.config);
                 return;
             }
 
@@ -123,7 +144,80 @@ public class FileUtil {
             }
             Configs.inCreative = new ToggleConfig(Configs.inCreative.getId(), Configs.inCreative.getNarrator(), toggleConfig.isEnable());
 
+            toggleConfig = config.getToggles().get(Configs.isAnvil.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.isAnvil.isEnable());
+                config.getToggles().put(Configs.isAnvil.getId(), toggleConfig);
+            }
+            Configs.isAnvil = new ToggleConfig(Configs.isAnvil.getId(), Configs.isAnvil.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.isMultiplayer.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.isMultiplayer.isEnable());
+                config.getToggles().put(Configs.isMultiplayer.getId(), toggleConfig);
+            }
+            Configs.isMultiplayer = new ToggleConfig(Configs.isMultiplayer.getId(), Configs.isMultiplayer.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.forwardKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.forwardKey.isEnable());
+                config.getToggles().put(Configs.forwardKey.getId(), toggleConfig);
+            }
+            Configs.forwardKey = new ToggleConfig(Configs.forwardKey.getId(), Configs.forwardKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.backwardKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.backwardKey.isEnable());
+                config.getToggles().put(Configs.backwardKey.getId(), toggleConfig);
+            }
+            Configs.backwardKey = new ToggleConfig(Configs.backwardKey.getId(), Configs.backwardKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.leftKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.leftKey.isEnable());
+                config.getToggles().put(Configs.leftKey.getId(), toggleConfig);
+            }
+            Configs.leftKey = new ToggleConfig(Configs.leftKey.getId(), Configs.leftKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.rightKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.rightKey.isEnable());
+                config.getToggles().put(Configs.rightKey.getId(), toggleConfig);
+            }
+            Configs.rightKey = new ToggleConfig(Configs.rightKey.getId(), Configs.rightKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.jumpKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.jumpKey.isEnable());
+                config.getToggles().put(Configs.jumpKey.getId(), toggleConfig);
+            }
+            Configs.jumpKey = new ToggleConfig(Configs.jumpKey.getId(), Configs.jumpKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.sneakKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.sneakKey.isEnable());
+                config.getToggles().put(Configs.sneakKey.getId(), toggleConfig);
+            }
+            Configs.sneakKey = new ToggleConfig(Configs.sneakKey.getId(), Configs.sneakKey.getNarrator(), toggleConfig.isEnable());
+
+            toggleConfig = config.getToggles().get(Configs.sprintKey.getId());
+            if (toggleConfig == null) {
+                flag = true;
+                toggleConfig = new JToggleConfig(Configs.sprintKey.isEnable());
+                config.getToggles().put(Configs.sprintKey.getId(), toggleConfig);
+            }
+            Configs.sprintKey = new ToggleConfig(Configs.sprintKey.getId(), Configs.sprintKey.getNarrator(), toggleConfig.isEnable());
+
             if (flag) {
+                saveConfig(config);
                 return;
             }
             Configs.config = config;
