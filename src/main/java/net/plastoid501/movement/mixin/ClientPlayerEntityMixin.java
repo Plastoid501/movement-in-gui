@@ -34,18 +34,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
-    @Redirect(
-            method = "tickMovement",
-            at = @At(
-                    value = "INVOKE",
-                    //#if MC > 11603
-                    target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"
-                    //#else
-                    //$$ target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
-                    //#endif
-            )
-    )
-    private boolean modifyTickMovement(KeyBinding instance) {
-        return ClientUtil.test(instance);
-    }
+    //#if MC < 12105
+    //$$ @Redirect(
+    //$$         method = "tickMovement",
+    //$$         at = @At(
+    //$$                 value = "INVOKE",
+    //$$                 //#if MC > 11603
+    //$$                 target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"
+    //$$                 //#else
+    //$$                 //$$ target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
+    //$$                 //#endif
+    //$$         )
+    //$$ )
+    //$$ private boolean modifyTickMovement(KeyBinding instance) {
+    //$$     return ClientUtil.test(instance);
+    //$$ }
+    //#endif
 }
