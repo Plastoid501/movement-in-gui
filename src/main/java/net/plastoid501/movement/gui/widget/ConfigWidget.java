@@ -234,11 +234,18 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
                 //#elseif MC > 11502
                 //$$ MatrixStack context,
                 //#endif
-                int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta
+                //#if MC > 12108
+                //#else
+                //$$ int index, int y, int x, int entryWidth, int entryHeight,
+                //#endif
+                int mouseX, int mouseY, boolean hovered, float tickDelta
         ) {
-            //#if MC > 11903
-            this.text.setPosition(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5);
+            //#if MC > 12108
+            this.text.setPosition(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, getY() + 5);
             this.text.render(context, mouseX, mouseY, tickDelta);
+            //#elseif MC > 11903
+            //$$ this.text.setPosition(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5);
+            //$$ this.text.render(context, mouseX, mouseY, tickDelta);
             //#elseif MC > 11902
             //$$ this.text.setPos(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5);
             //$$ this.text.render(context, mouseX, mouseY, tickDelta);
@@ -384,13 +391,18 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
                 //#elseif MC > 11502
                 //$$ MatrixStack context,
                 //#endif
-                int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta
+                //#if MC > 12108
+                //#else
+                //$$ int index, int y, int x, int entryWidth, int entryHeight,
+                //#endif
+                int mouseX, int mouseY, boolean hovered, float tickDelta
         ) {
-
-
-            //#if MC > 11903
-            this.text.setPosition(x - 60, y + 5);
+            //#if MC > 12108
+            this.text.setPosition(getX() - 60, getY() + 5);
             this.text.render(context, mouseX, mouseY, tickDelta);
+            //#elseif MC > 11903
+            //$$ this.text.setPosition(x - 60, y + 5);
+            //$$ this.text.render(context, mouseX, mouseY, tickDelta);
             //#elseif MC > 11902
             //$$ this.text.setPos(x - 60, y + 5);
             //$$ this.text.render(context, mouseX, mouseY, tickDelta);
@@ -400,9 +412,12 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
             //$$ this.textRenderer.draw(this.text.asFormattedString(), x - 60, y + 5, Color.WHITE.getRGB());
             //#endif
 
-            //#if MC > 11903
-            this.enableButton.setPosition(x + 190, y);
-            this.resetButton.setPosition(x + 253, y);
+            //#if MC > 12108
+            this.enableButton.setPosition(getX() + 190, getY());
+            this.resetButton.setPosition(getX() + 253, getY());
+            //#elseif MC > 11903
+            //$$ this.enableButton.setPosition(x + 190, y);
+            //$$ this.resetButton.setPosition(x + 253, y);
             //#elseif MC > 11902
             //$$ this.enableButton.setPos(x + 190, y);
             //$$ this.resetButton.setPos(x + 253, y);

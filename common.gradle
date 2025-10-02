@@ -43,11 +43,20 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	if (mcVersion <= 11501) {
-		modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	} else {
-		modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-	}
+    if (mcVersion >= 12109) {
+        modImplementation files(rootProject.file('libs/modmenu-v15.0.0+unknown.9e6a8a7.jar'))
+    } else if (mcVersion >= 11502) {
+        modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    } else {
+        modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    }
+
+//	if (mcVersion <= 11501) {
+//		modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+//	} else {
+//		modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+//        modImplementation files('tmp/modmenu-v15.0.0+unknown.9e6a8a7.jar')
+//	}
 
 }
 

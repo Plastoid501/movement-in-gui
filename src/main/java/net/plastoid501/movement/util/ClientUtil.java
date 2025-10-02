@@ -150,8 +150,10 @@ public class ClientUtil {
         InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
         if (
                 !InputUtil.isKeyPressed(
-                        //#if MC > 11404
-                        client.getWindow().getHandle(),
+                        //#if MC > 12108
+                        client.getWindow(),
+                        //#elseif MC > 11404
+                        //$$ client.getWindow().getHandle(),
                         //#else
                         //$$ client.window.getHandle(),
                         //#endif
