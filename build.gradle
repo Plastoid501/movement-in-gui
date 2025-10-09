@@ -14,17 +14,17 @@ plugins {
 preprocess {
 	strictExtraMappings = false
 
-	def mc1144  = createNode('1.14.4', 1_14_04, '')
-	def mc1151  = createNode('1.15.1', 1_15_01, '')
-	def mc1152  = createNode('1.15.2', 1_15_02, '')
-	def mc1161  = createNode('1.16.1', 1_16_01, '')
-	def mc1163  = createNode('1.16.3', 1_16_03, '')
-	def mc1165  = createNode('1.16.5', 1_16_05, '')
-	def mc1171  = createNode('1.17.1', 1_17_01, '')
-	def mc1182  = createNode('1.18.2', 1_18_02, '')
-	def mc1192  = createNode('1.19.2', 1_19_02, '')
-	def mc1193  = createNode('1.19.3', 1_19_03, '')
-	def mc1194  = createNode('1.19.4', 1_19_04, '')
+	def mc1144 = createNode('1.14.4', 1_14_04, '')
+	def mc1151 = createNode('1.15.1', 1_15_01, '')
+	def mc1152 = createNode('1.15.2', 1_15_02, '')
+	def mc1161 = createNode('1.16.1', 1_16_01, '')
+	def mc1163 = createNode('1.16.3', 1_16_03, '')
+	def mc1165 = createNode('1.16.5', 1_16_05, '')
+	def mc1171 = createNode('1.17.1', 1_17_01, '')
+	def mc1182 = createNode('1.18.2', 1_18_02, '')
+	def mc1192 = createNode('1.19.2', 1_19_02, '')
+	def mc1193 = createNode('1.19.3', 1_19_03, '')
+	def mc1194 = createNode('1.19.4', 1_19_04, '')
 	def mc1201 = createNode('1.20.1', 1_20_01, '')
 	def mc1202 = createNode('1.20.2', 1_20_02, '')
 	def mc1204 = createNode('1.20.4', 1_20_04, '')
@@ -32,7 +32,7 @@ preprocess {
 	def mc1213 = createNode('1.21.3', 1_21_03, '')
 	def mc1214 = createNode('1.21.4', 1_21_04, '')
 	def mc1218 = createNode('1.21.8', 1_21_08, '')
-    def mc1219 = createNode('1.21.9', 1_21_09, '')
+    def mc12110 = createNode('1.21.10', 1_21_10, '')
 
 	mc1144.link(mc1151, null)
 	mc1151.link(mc1152, null)
@@ -51,7 +51,7 @@ preprocess {
 	mc1206.link(mc1213, null)
 	mc1213.link(mc1214, null)
 	mc1214.link(mc1218, null)
-    mc1218.link(mc1219, null)
+    mc1218.link(mc12110, null)
 }
 
 tasks.register('buildAndGather') {
