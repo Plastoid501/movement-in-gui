@@ -1,7 +1,7 @@
 plugins {
 	id 'maven-publish'
 	id 'com.github.hierynomus.license' version '0.16.1' apply false
-	id 'fabric-loom' version '1.11-SNAPSHOT' apply false
+	id 'fabric-loom' version '1.14-SNAPSHOT' apply false
 
 	// https://github.com/ReplayMod/preprocessor
 	// https://github.com/Fallen-Breath/preprocessor
@@ -32,7 +32,7 @@ preprocess {
 	def mc1213 = createNode('1.21.3', 1_21_03, '')
 	def mc1214 = createNode('1.21.4', 1_21_04, '')
 	def mc1218 = createNode('1.21.8', 1_21_08, '')
-    def mc12110 = createNode('1.21.10', 1_21_10, '')
+    def mc12111 = createNode('1.21.11', 1_21_11, '')
 
 	mc1144.link(mc1151, null)
 	mc1151.link(mc1152, null)
@@ -51,7 +51,7 @@ preprocess {
 	mc1206.link(mc1213, null)
 	mc1213.link(mc1214, null)
 	mc1214.link(mc1218, null)
-    mc1218.link(mc12110, null)
+    mc1218.link(mc12111, null)
 }
 
 tasks.register('buildAndGather') {
