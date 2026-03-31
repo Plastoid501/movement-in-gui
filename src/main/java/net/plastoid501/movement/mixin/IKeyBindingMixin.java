@@ -20,21 +20,13 @@
 
 package net.plastoid501.movement.mixin;
 
-//#if MC > 11603
-import net.minecraft.client.option.KeyBinding;
-//#else
-//$$ import net.minecraft.client.options.KeyBinding;
-//#endif
-import net.minecraft.client.util.InputUtil;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(KeyBinding.class)
+@Mixin(KeyMapping.class)
 public interface IKeyBindingMixin {
-    //#if MC > 11502
-    @Accessor("boundKey")
-    //#else
-    //$$ @Accessor("keyCode")
-    //#endif
-    InputUtil.Key getBoundKey();
+    @Accessor("key")
+    InputConstants.Key getBoundKey();
 }

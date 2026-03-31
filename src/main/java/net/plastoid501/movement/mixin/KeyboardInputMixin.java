@@ -21,12 +21,8 @@
 
 package net.plastoid501.movement.mixin;
 
-import net.minecraft.client.input.KeyboardInput;
-//#if MC > 11603
-import net.minecraft.client.option.KeyBinding;
-//#else
-//$$ import net.minecraft.client.options.KeyBinding;
-//#endif
+import net.minecraft.client.player.KeyboardInput;
+import net.minecraft.client.KeyMapping;
 import net.plastoid501.movement.util.ClientUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,14 +34,10 @@ public class KeyboardInputMixin {
             method = "tick",
             at = @At(
                     value = "INVOKE",
-                    //#if MC > 11603
-                    target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"
-                    //#else
-                    //$$ target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
-                    //#endif
+                    target = "Lnet/minecraft/client/KeyMapping;isDown()Z"
             )
     )
-    private boolean modifyTick(KeyBinding instance) {
+    private boolean modifyTick(KeyMapping instance) {
         return ClientUtil.test(instance);
     }
 }

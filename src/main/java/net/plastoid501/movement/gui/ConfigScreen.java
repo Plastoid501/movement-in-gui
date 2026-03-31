@@ -20,25 +20,27 @@
 
 package net.plastoid501.movement.gui;
 
-//#if MC > 11904
-import net.minecraft.client.gui.DrawContext;
+//#if MC > 260000
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//#elseif MC > 11904
+//$$ import net.minecraft.client.gui.GuiGraphics;
 //#elseif MC > 11502
-//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import com.mojang.blaze3d.vertex.PoseStack;
 //#endif
 
 //#if MC > 11502
-import net.minecraft.screen.ScreenTexts;
+import net.minecraft.network.chat.CommonComponents;
 //#else
-//$$ import net.minecraft.client.resource.language.I18n;
+//$$ import net.minecraft.client.resources.language.I18n;
 //#endif
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
 
 //#if MC > 11502
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 //#else
-//$$ import net.minecraft.text.LiteralText;
+//$$ import net.minecraft.network.chat.TextComponent;
 //#endif
 
 import net.plastoid501.movement.gui.widget.ConfigWidget;
@@ -49,11 +51,9 @@ public class ConfigScreen extends Screen {
 
     public ConfigScreen(Screen parent) {
         //#if MC > 11601
-        super(Text.of("Movement In GUI"));
-        //#elseif MC > 11502
-        //$$ super(Text.method_30163("Movement In GUI"));
+        super(Component.nullToEmpty("Movement In GUI"));
         //#else
-        //$$ super(new LiteralText("Movement In GUI"));
+        //$$ super(new TextComponent("Movement In GUI"));
         //#endif
 
         this.parent = parent;
@@ -61,64 +61,72 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        //#if MC > 11502
-        this.configList = new ConfigWidget(this, this.client);
-        //#else
-        //$$ this.configList = new ConfigWidget(this, this.minecraft);
-        //#endif
+        this.configList = new ConfigWidget(this, this.minecraft);
 
         //#if MC > 11605
-        this.addSelectableChild(this.configList);
+        this.addWidget(this.configList);
         //#else
         //$$ this.children.add(this.configList);
         //#endif
 
         //#if MC > 11902
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> {
-            this.close();
-        }).dimensions(this.width / 2 - 100, this.height - 27, 200, 20).build());
+        this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> {
+            this.onClose();
+        }).bounds(this.width / 2 - 100, this.height - 27, 200, 20).build());
         //#elseif MC > 11605
-        //$$ this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> {
+        //$$ this.addRenderableWidget(new Button(this.width / 2 - 100, this.height - 27, 200, 20, CommonComponents.DONE, button -> {
         //$$     this.close();
         //$$ }));
         //#elseif MC > 11502
-        //$$ this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> {
+        //$$ this.addButton(new Button(this.width / 2 - 100, this.height - 27, 200, 20, CommonComponents.DONE, button -> {
         //$$     this.onClose();
         //$$ }));
         //#else
-        //$$ this.addButton(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, I18n.translate("gui.done", new Object[0]), button -> {
+        //$$ this.addButton(new Button(this.width / 2 - 100, this.height - 27, 200, 20, I18n.translate("gui.done", new Object[0]), button -> {
         //$$     this.onClose();
         //$$ }));
         //#endif
     }
 
     @Override
-    public void render(
-            //#if MC > 11904
-            DrawContext context,
+    //#if MC > 260000
+    public void extractRenderState(
+    //#else
+    //$$ public void render(
+    //#endif
+            //#if MC > 260000
+            GuiGraphicsExtractor context,
+            //#elseif MC > 11904
+            //$$ GuiGraphics context,
             //#elseif MC > 11502
-            //$$ MatrixStack context,
+            //$$ PoseStack context,
             //#endif
             int mouseX, int mouseY, float delta
     ) {
-        //#if MC > 12001
-        super.render(context, mouseX, mouseY, delta);
+        //#if MC > 260000
+        super.extractRenderState(context, mouseX, mouseY, delta);
+        //#elseif MC > 12001
+        //$$ super.render(context, mouseX, mouseY, delta);
         //#endif
 
-        //#if MC > 11502
-        this.configList.render(context, mouseX, mouseY, delta);
+        //#if MC > 260000
+        this.configList.extractRenderState(context, mouseX, mouseY, delta);
+        //#elseif MC > 11502
+        //$$ this.configList.render(context, mouseX, mouseY, delta);
         //#else
         //$$ this.configList.render(mouseX, mouseY, delta);
         //#endif
 
-        //#if MC > 11904
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
+        //#if MC > 260000
+        context.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        //#elseif MC > 11904
+        //$$ context.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         //#elseif MC > 11903
-        //$$ drawCenteredTextWithShadow(context, this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
+        //$$ drawCenteredString(context, this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         //#elseif MC > 11605
-        //$$ drawCenteredTextWithShadow(context, this.textRenderer, this.title.asOrderedText(), this.width / 2, 8, 0xFFFFFF);
+        //$$ drawCenteredString(context, this.font, this.title.getVisualOrderText(), this.width / 2, 8, 0xFFFFFF);
         //#elseif MC > 11502
-        //$$ drawCenteredText(context, this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
+        //$$ drawCenteredText(context, this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         //#else
         //$$ drawCenteredString(this.font, this.title.asFormattedString(), this.width / 2, 8, 0xFFFFFF);
         //#endif
@@ -131,9 +139,9 @@ public class ConfigScreen extends Screen {
         //#endif
     }
 
-    //#if MC > 11701
+    //#if MC > 260000
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return false;
     }
     //#else
@@ -143,27 +151,13 @@ public class ConfigScreen extends Screen {
     //$$ }
     //#endif
 
-    //#if MC > 11701
+    //#if MC > 11502
     @Override
-    public void close() {
-        if (this.client != null) {
-            this.client.setScreen(this.parent);
+    public void onClose() {
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(this.parent);
         }
     }
-    //#elseif MC > 11605
-    //$$ @Override
-    //$$ public void onClose() {
-    //$$     if (this.client != null) {
-    //$$         this.client.setScreen(this.parent);
-    //$$     }
-    //$$ }
-    //#elseif MC > 11502
-    //$$ @Override
-    //$$ public void onClose() {
-    //$$     if (this.client != null) {
-    //$$         this.client.openScreen(this.parent);
-    //$$     }
-    //$$ }
     //#else
     //$$ @Override
     //$$ public void onClose() {

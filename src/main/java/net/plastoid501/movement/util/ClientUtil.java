@@ -28,112 +28,90 @@ import com.terraformersmc.modmenu.gui.ModsScreen;
 //#else
 //$$ import io.github.prospector.modmenu.gui.ModListScreen;
 //#endif
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.*;
-import net.minecraft.client.gui.screen.ingame.AnvilScreen;
-import net.minecraft.client.gui.screen.ingame.BookEditScreen;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.*;
+import net.minecraft.client.gui.screens.inventory.AnvilScreen;
+import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraft.client.gui.screens.achievement.StatsScreen;
 
 //#if MC > 11903
-import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
-import net.minecraft.client.gui.screen.option.TelemetryInfoScreen;
-//#endif
-
-//#if MC <= 11404
-//$$ import net.minecraft.client.gui.screen.options.*;
+import net.minecraft.client.gui.screens.telemetry.TelemetryInfoScreen;
 //#endif
 
 //#if MC > 11603
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 //#elseif MC > 11404
-//$$ import net.minecraft.client.gui.screen.options.GameOptionsScreen;
+//$$ import net.minecraft.client.gui.screens.OptionsSubScreen;
 //#endif
 
-//#if MC > 11603
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-//#elseif MC > 11502
-//$$ import net.minecraft.client.gui.screen.options.OptionsScreen;
-//#endif
+import net.minecraft.client.gui.screens.options.OptionsScreen;
 
 //#if MC > 11601
-import net.minecraft.client.gui.screen.pack.PackScreen;
+import net.minecraft.client.gui.screens.packs.PackSelectionScreen;
 //#elseif MC > 11502
-//$$ import net.minecraft.client.gui.screen.pack.ResourcePackScreen;
+//$$ import net.minecraft.client.gui.screens.ResourcePackSelectScreen;
 //#else
-//$$ import net.minecraft.client.gui.screen.resourcepack.ResourcePackOptionsScreen;
+//$$ import net.minecraft.client.gui.screens.resourcepacks.ResourcePackSelectScreen;
 //#endif
 
-//#if MC > 11603
-import net.minecraft.client.option.KeyBinding;
-//#else
-//$$ import net.minecraft.client.options.KeyBinding;
-//#endif
+import net.minecraft.client.KeyMapping;
 
-import net.minecraft.client.util.InputUtil;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.plastoid501.movement.config.Configs;
 import net.plastoid501.movement.mixin.IKeyBindingMixin;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientUtil {
-    public static boolean test(KeyBinding instance) {
-        if (instance.isPressed()) {
+    public static boolean test(KeyMapping instance) {
+        if (instance.isDown()) {
             return true;
         }
         if (!Configs.modEnable.isEnable()) {
             return false;
         }
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.currentScreen == null ||
-                client.currentScreen instanceof BookEditScreen ||
-                client.currentScreen instanceof SignEditScreen ||
-                (client.currentScreen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
-                client.currentScreen instanceof ChatScreen ||
-                client.currentScreen instanceof CreditsScreen ||
-                client.currentScreen instanceof GameMenuScreen ||
-                client.currentScreen instanceof StatsScreen ||
-                client.currentScreen instanceof OpenToLanScreen ||
+        Minecraft client = Minecraft.getInstance();
+        if (client.screen == null ||
+                client.screen instanceof BookEditScreen ||
+                client.screen instanceof SignEditScreen ||
+                (client.screen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
+                client.screen instanceof ChatScreen ||
+                client.screen instanceof WinScreen ||
+                client.screen instanceof PauseScreen ||
+                client.screen instanceof StatsScreen ||
+                client.screen instanceof ShareToLanScreen ||
 
                 //#if MC > 11904
-                client.currentScreen instanceof TelemetryInfoScreen ||
-                client.currentScreen instanceof CreditsAndAttributionScreen ||
+                client.screen instanceof TelemetryInfoScreen ||
+                client.screen instanceof CreditsAndAttributionScreen ||
                 //#endif
 
                 //#if MC > 11404
-                client.currentScreen instanceof GameOptionsScreen ||
+                client.screen instanceof OptionsSubScreen ||
                 //#else
-                //$$ client.currentScreen instanceof AccessibilityScreen ||
-                //$$ client.currentScreen instanceof ChatOptionsScreen ||
-                //$$ client.currentScreen instanceof ControlsOptionsScreen ||
-                //$$ client.currentScreen instanceof LanguageOptionsScreen ||
-                //$$ client.currentScreen instanceof MouseOptionsScreen ||
-                //$$ client.currentScreen instanceof SkinOptionsScreen ||
-                //$$ client.currentScreen instanceof SoundOptionsScreen ||
+                //$$ client.screen instanceof AccessibilityOptionsScreen ||
+                //$$ client.screen instanceof ChatOptionsScreen ||
+                //$$ client.screen instanceof ControlsScreen ||
+                //$$ client.screen instanceof LanguageSelectScreen ||
+                //$$ client.screen instanceof MouseSettingsScreen ||
+                //$$ client.screen instanceof SkinCustomizationScreen ||
+                //$$ client.screen instanceof SoundOptionsScreen ||
                 //#endif
 
-                //#if MC > 11502
-                client.currentScreen instanceof OptionsScreen ||
-                //#else
-                //$$ client.currentScreen instanceof SettingsScreen ||
-                //#endif
+                client.screen instanceof OptionsScreen ||
 
-                //#if MC > 11802
-                client.currentScreen instanceof ConfirmLinkScreen ||
-                //#else
-                //$$ client.currentScreen instanceof ConfirmScreen ||
-                //#endif
+                client.screen instanceof ConfirmLinkScreen ||
 
                 //#if MC > 11601
-                client.currentScreen instanceof PackScreen ||
-                //#elseif MC > 11502
-                //$$ client.currentScreen instanceof ResourcePackScreen ||
+                client.screen instanceof PackSelectionScreen ||
                 //#else
-                //$$ client.currentScreen instanceof ResourcePackOptionsScreen ||
+                //$$ client.screen instanceof ResourcePackSelectScreen ||
                 //#endif
 
                 //#if MC > 11501
-                client.currentScreen instanceof ModsScreen
+                client.screen instanceof ModsScreen
                 //#else
-                //$$ client.currentScreen instanceof ModListScreen
+                //$$ client.screen instanceof ModListScreen
                 //#endif
         ) {
             return false;
@@ -141,41 +119,35 @@ public class ClientUtil {
         if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
             return false;
         }
-        if (!Configs.isMultiplayer.isEnable() && !client.isInSingleplayer()) {
+        if (!Configs.isMultiplayer.isEnable() && !client.isLocalServer()) {
             return false;
         }
         if (checkKey(instance)) {
             return false;
         }
-        InputUtil.Key key = ((IKeyBindingMixin) instance).getBoundKey();
+        InputConstants.Key key = ((IKeyBindingMixin) instance).getBoundKey();
         if (
-                !InputUtil.isKeyPressed(
+                !InputConstants.isKeyDown(
                         //#if MC > 12108
                         client.getWindow(),
-                        //#elseif MC > 11404
-                        //$$ client.getWindow().getHandle(),
                         //#else
-                        //$$ client.window.getHandle(),
+                        //$$ client.getWindow().getWindow(),
                         //#endif
-                        //#if MC > 11502
-                        key.getCode()
-                        //#else
-                        //$$ key.getKeyCode()
-                        //#endif
+                        key.getValue()
                 )
         ) {
             return false;
         }
         //#if MC > 12002
-        KeyBinding.setKeyPressed(key, true);
-        KeyBinding.onKeyPressed(key);
+        KeyMapping.set(key, true);
+        KeyMapping.click(key);
         //#endif
 
         return true;
     }
 
-    public static boolean checkKey(KeyBinding instance) {
-        switch (instance.getDefaultKey().getCode()) {
+    public static boolean checkKey(KeyMapping instance) {
+        switch (instance.getDefaultKey().getValue()) {
             case GLFW.GLFW_KEY_W:
                 return !Configs.forwardKey.isEnable();
             case GLFW.GLFW_KEY_S:

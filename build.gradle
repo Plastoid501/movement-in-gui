@@ -1,18 +1,19 @@
 plugins {
-	id 'maven-publish'
-	id 'com.github.hierynomus.license' version '0.16.1' apply false
-	id 'fabric-loom' version '1.14-SNAPSHOT' apply false
+    id 'maven-publish'
+    id 'com.github.hierynomus.license' version '0.16.1' apply false
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT' apply false
+    id 'net.fabricmc.fabric-loom-remap' version '1.15-SNAPSHOT' apply false
 
-	// https://github.com/ReplayMod/preprocessor
-	// https://github.com/Fallen-Breath/preprocessor
-	id 'com.replaymod.preprocess' version 'd452ef7612'
+    // https://github.com/ReplayMod/preprocessor
+    // https://github.com/Fallen-Breath/preprocessor
+    id 'com.replaymod.preprocess' version 'c5abb4fb12'
 
-	// https://github.com/Fallen-Breath/yamlang
-	id 'me.fallenbreath.yamlang' version '1.5.0' apply false
+    // https://github.com/Fallen-Breath/yamlang
+    id 'me.fallenbreath.yamlang' version '1.5.0' apply false
 }
 
 preprocess {
-	strictExtraMappings = false
+    strictExtraMappings = false
 
 	def mc1144 = createNode('1.14.4', 1_14_04, '')
 	def mc1151 = createNode('1.15.1', 1_15_01, '')
@@ -33,6 +34,7 @@ preprocess {
 	def mc1214 = createNode('1.21.4', 1_21_04, '')
 	def mc1218 = createNode('1.21.8', 1_21_08, '')
     def mc12111 = createNode('1.21.11', 1_21_11, '')
+    def mc260100 = createNode('26.1', 26_01_00, '')
 
 	mc1144.link(mc1151, null)
 	mc1151.link(mc1152, null)
@@ -52,29 +54,35 @@ preprocess {
 	mc1213.link(mc1214, null)
 	mc1214.link(mc1218, null)
     mc1218.link(mc12111, null)
+    mc12111.link(mc260100, null)
+
+    // See https://github.com/Fallen-Breath/fabric-mod-template/blob/1d72d77a1c5ce0bf060c2501270298a12adab679/build.gradle#L55-L63
+    for (final def node in getNodes()) {
+        findProject(node.project).ext.mcVersion = node.mcVersion
+    }
 }
 
 tasks.register('buildAndGather') {
-	subprojects {
-		dependsOn project.tasks.named('build').get()
-	}
-	doFirst {
-		println 'Gathering builds'
-		def buildLibs = {
-			p -> p.buildDir.toPath().resolve('libs')
-		}
-		delete fileTree(buildLibs(rootProject)) {
-			include '*'
-		}
-		subprojects {
-			copy {
-				from(buildLibs(project)) {
-					include '*.jar'
-					exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
-				}
-				into buildLibs(rootProject)
-				duplicatesStrategy DuplicatesStrategy.INCLUDE
-			}
-		}
-	}
+    subprojects {
+        dependsOn project.tasks.named('build').get()
+    }
+    doFirst {
+        println 'Gathering builds'
+        def buildLibs = {
+            p -> p.buildDir.toPath().resolve('libs')
+        }
+        delete fileTree(buildLibs(rootProject)) {
+            include '*'
+        }
+        subprojects {
+            copy {
+                from(buildLibs(project)) {
+                    include '*.jar'
+                    exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
+                }
+                into buildLibs(rootProject)
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+        }
+    }
 }

@@ -21,32 +21,24 @@
 
 package net.plastoid501.movement.mixin;
 
-import net.minecraft.client.network.ClientPlayerEntity;
-//#if MC > 11603
-import net.minecraft.client.option.KeyBinding;
-//#else
-//$$ import net.minecraft.client.options.KeyBinding;
-//#endif
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.KeyMapping;
 import net.plastoid501.movement.util.ClientUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ClientPlayerEntity.class)
+@Mixin(LocalPlayer.class)
 public class ClientPlayerEntityMixin {
     //#if MC < 12105
     //$$ @Redirect(
-    //$$         method = "tickMovement",
+    //$$         method = "aiStep",
     //$$         at = @At(
     //$$                 value = "INVOKE",
-    //$$                 //#if MC > 11603
-    //$$                 target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z"
-    //$$                 //#else
-    //$$                 //$$ target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
-    //$$                 //#endif
+    //$$                 target = "Lnet/minecraft/client/KeyMapping;isDown()Z"
     //$$         )
     //$$ )
-    //$$ private boolean modifyTickMovement(KeyBinding instance) {
+    //$$ private boolean modifyTickMovement(KeyMapping instance) {
     //$$     return ClientUtil.test(instance);
     //$$ }
     //#endif

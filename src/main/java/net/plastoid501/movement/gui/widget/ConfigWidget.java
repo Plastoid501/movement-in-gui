@@ -23,12 +23,16 @@ package net.plastoid501.movement.gui.widget;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.widget.*;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+//import net.minecraft.client.MinecraftClient;
+//import net.minecraft.client.font.TextRenderer;
+//import net.minecraft.client.gui.Element;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+//import net.minecraft.client.gui.widget.*;
+//import net.minecraft.text.Style;
+//import net.minecraft.text.Text;
 
 //#if MC <= 11502
 //$$ import net.minecraft.text.LiteralText;
@@ -41,21 +45,24 @@ import net.minecraft.text.Text;
 //$$ import net.minecraft.util.Formatting;
 //#endif
 
-//#if MC > 11904
-import net.minecraft.client.gui.DrawContext;
+//#if MC > 260000
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//#elseif MC > 11904
+//$$ import net.minecraft.client.gui.GuiGraphics;
 //#elseif MC > 11502
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-
-//#if MC > 11605
-import net.minecraft.client.gui.Selectable;
+//$$ import com.mojang.blaze3d.vertex.PoseStack;
 //#endif
 
 //#if MC > 11902
-import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 //#endif
 
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.plastoid501.movement.config.Configs;
 import net.plastoid501.movement.config.ModConfig;
 import net.plastoid501.movement.config.ToggleConfig;
@@ -64,17 +71,16 @@ import net.plastoid501.movement.gui.ConfigScreen;
 import net.plastoid501.movement.util.FileUtil;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.List;
 
 
 @Environment(EnvType.CLIENT)
-public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
+public class ConfigWidget extends ContainerObjectSelectionList<ConfigWidget.Entry> {
     final ConfigScreen parent;
-    private final MinecraftClient client;
+    private final Minecraft client;
     private final ModConfig CONFIG = Configs.config;
 
-    public ConfigWidget(ConfigScreen parent, MinecraftClient client) {
+    public ConfigWidget(ConfigScreen parent, Minecraft client) {
         //#if MC > 12002
         super(client, parent.width + 155, parent.height - 52, 20, 23);
         //#else
@@ -85,34 +91,25 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
         this.initEntries(client);
     }
 
-    private void initEntries(MinecraftClient client) {
+    private void initEntries(Minecraft client) {
         if (CONFIG != null) {
             //#if MC > 11601
-            this.addEntry(new CategoryEntry(Text.of("-- Toggle --"), client.textRenderer));
-            //#elseif MC > 11502
-            //$$ this.addEntry(new CategoryEntry(Text.method_30163("-- Toggle --"), client.textRenderer));
+            this.addEntry(new CategoryEntry(Component.nullToEmpty("-- Toggle --"), client.font));
             //#else
-            //$$ this.addEntry(new CategoryEntry(new LiteralText("-- Toggle --"), client.textRenderer));
+            //$$ this.addEntry(new CategoryEntry(new TextComponent("-- Toggle --"), client.font));
             //#endif
 
-            Configs.getToggles().keySet().forEach(key -> this.addEntry(new ToggleEntry(key, client.textRenderer, CONFIG)));
+            Configs.getToggles().keySet().forEach(key -> this.addEntry(new ToggleEntry(key, client.font, CONFIG)));
 
             //#if MC > 11601
-            this.addEntry(new CategoryEntry(Text.of(""), client.textRenderer));
-            //#elseif MC > 11502
-            //$$ this.addEntry(new CategoryEntry(Text.method_30163(""), client.textRenderer));
+            this.addEntry(new CategoryEntry(Component.nullToEmpty(""), client.font));
             //#else
-            //$$ this.addEntry(new CategoryEntry(new LiteralText(""), client.textRenderer));
+            //$$ this.addEntry(new CategoryEntry(new TextComponent(""), client.font));
             //#endif
         }
     }
 
     //#if MC > 12004
-    //#elseif MC > 11502
-    //$$ @Override
-    //$$ protected int getScrollbarPositionX() {
-    //$$     return super.getScrollbarPositionX() + 85;
-    //$$ }
     //#else
     //$$ @Override
     //$$ protected int getScrollbarPosition() {
@@ -135,8 +132,8 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     //#if MC > 12004
     //#elseif MC > 12002
     //$$ @Override
-    //$$ public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-    //$$     if (this.client == null || this.client.player == null || this.client.world == null) {
+    //$$ public void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //$$     if (this.client == null || this.client.player == null || this.client.level == null) {
     //$$         this.setRenderBackground(true);
     //$$     } else {
     //$$         this.setRenderBackground(false);
@@ -145,8 +142,8 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     //$$ }
     //#elseif MC > 11904
     //$$ @Override
-    //$$ public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-    //$$     if (this.client == null || this.client.player == null || this.client.world == null) {
+    //$$ public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //$$     if (this.client == null || this.client.player == null || this.client.level == null) {
     //$$         this.setRenderBackground(true);
     //$$     } else {
     //$$         this.setRenderBackground(false);
@@ -155,8 +152,8 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     //$$ }
     //#elseif MC > 11605
     //$$ @Override
-    //$$ public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-    //$$     if (this.client == null || this.client.player == null || this.client.world == null) {
+    //$$ public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    //$$     if (this.client == null || this.client.player == null || this.client.level == null) {
     //$$         this.setRenderBackground(true);
     //$$     } else {
     //$$         this.setRenderBackground(false);
@@ -165,8 +162,8 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     //$$ }
     //#elseif MC > 11603
     //$$ @Override
-    //$$ public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-    //$$     if (this.client == null || this.client.player == null || this.client.world == null) {
+    //$$ public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    //$$     if (this.client == null || this.client.player == null || this.client.level == null) {
     //$$         this.method_31322(true);
     //$$     } else {
     //$$         this.method_31322(false);
@@ -175,7 +172,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     //$$ }
     //#elseif  MC > 11502
     //$$ @Override
-    //$$ public void renderBackground(MatrixStack matrices) {
+    //$$ public void renderBackground(PoseStack matrices) {
     //$$ }
     //#else
     //$$ @Override
@@ -185,30 +182,30 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
 
     public class CategoryEntry extends Entry {
         //#if MC > 11902
-        private final TextWidget text;
+        private final StringWidget text;
         //#else
         //$$ private final Text text;
-        //$$ private final TextRenderer textRenderer;
+        //$$ private final Font font;
         //#endif
         private final int textWidth;
 
-        CategoryEntry(Text CategoryName, TextRenderer textRenderer) {
+        CategoryEntry(Component CategoryName, Font font) {
             //#if MC > 11902
-            this.text = new TextWidget(CategoryName, textRenderer);
+            this.text = new StringWidget(CategoryName, font);
             this.textWidth = this.text.getWidth();
             //#else
             //$$ this.text = CategoryName;
-            //$$ this.textRenderer = textRenderer;
+            //$$ this.font = font;
                 //#if MC > 11502
-                //$$ this.textWidth = textRenderer.getWidth(this.text);
+                //$$ this.textWidth = font.width(this.text);
                 //#else
-                //$$ this.textWidth = textRenderer.getStringWidth(this.text.asFormattedString());
+                //$$ this.textWidth = font.wordWrapHeight(this.text.asFormattedString());
                 //#endif
             //#endif
         }
 
         @Override
-        public List<? extends Element> children() {
+        public List<? extends GuiEventListener> children() {
             //#if MC > 11902
             return ImmutableList.of(this.text);
             //#else
@@ -218,7 +215,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
 
         //#if MC > 11605
         @Override
-        public List<? extends Selectable> selectableChildren() {
+        public List<? extends NarratableEntry> narratables() {
             //#if MC > 11902
             return ImmutableList.of(this.text);
             //#else
@@ -227,34 +224,39 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
         }
         //#endif
 
+        //#if MC > 260000
         @Override
-        public void render(
-                //#if MC > 11904
-                DrawContext context,
-                //#elseif MC > 11502
-                //$$ MatrixStack context,
-                //#endif
-                //#if MC > 12108
-                //#else
-                //$$ int index, int y, int x, int entryWidth, int entryHeight,
-                //#endif
-                int mouseX, int mouseY, boolean hovered, float tickDelta
-        ) {
-            //#if MC > 12108
-            this.text.setPosition(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, getY() + 5);
-            this.text.render(context, mouseX, mouseY, tickDelta);
-            //#elseif MC > 11903
-            //$$ this.text.setPosition(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5);
-            //$$ this.text.render(context, mouseX, mouseY, tickDelta);
-            //#elseif MC > 11902
-            //$$ this.text.setPos(ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5);
-            //$$ this.text.render(context, mouseX, mouseY, tickDelta);
-            //#elseif MC > 11502
-            //$$ this.textRenderer.draw(context, this.text, ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5, Color.WHITE.getRGB());
-            //#else
-            //$$ this.textRenderer.draw(this.text.asFormattedString(), ConfigWidget.this.client.currentScreen.width / 2 - this.textWidth / 2, y + 5, Color.WHITE.getRGB());
-            //#endif
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            this.text.setPosition(ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, getY() + 5);
+            this.text.extractWidgetRenderState(context, mouseX, mouseY, tickDelta);
         }
+        //#else
+        //$$ @Override
+        //$$ public void renderContent(
+                     //#if MC > 11904
+                     //$$ GuiGraphics context,
+                    //#elseif MC > 11502
+                    //$$ PoseStack context,
+                    //#endif
+                     //#if MC > 12108
+                     //#else
+                     //$$ int index, int y, int x, int entryWidth, int entryHeight,
+                     //#endif
+        //$$         int mouseX, int mouseY, boolean hovered, float tickDelta
+        //$$ ) {
+                 //#if MC > 12108
+                 //$$ this.text.setPosition(ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, getY() + 5);
+                 //$$ this.text.render(context, mouseX, mouseY, tickDelta);
+                 //#elseif MC > 11902
+                 //$$ this.text.setPosition(ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, y + 5);
+                 //$$ this.text.render(context, mouseX, mouseY, tickDelta);
+                 //#elseif MC > 11502
+                 //$$ this.font.draw(context, this.text, ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, y + 5, Color.WHITE.getRGB());
+                 //#else
+                 //$$ this.font.draw(this.text.asFormattedString(), ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, y + 5, Color.WHITE.getRGB());
+                 //#endif
+        //$$ }
+        //#endif
 
         @Override
         void update() {
@@ -262,42 +264,38 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     }
 
     public class ToggleEntry extends Entry {
-        private final TextRenderer textRenderer;
+        private final Font font;
         private final ToggleConfig defaultConfig;
         private boolean enable;
         //#if MC > 11902
-        private final TextWidget text;
+        private final StringWidget text;
         //#else
-        //$$ private final Text text;
+        //$$ private final Component text;
         //#endif
-        private final ButtonWidget enableButton;
-        private final ButtonWidget resetButton;
+        private final Button enableButton;
+        private final Button resetButton;
 
-        ToggleEntry(String key, TextRenderer textRenderer, ModConfig config) {
-            this.textRenderer = textRenderer;
+        ToggleEntry(String key, Font font, ModConfig config) {
+            this.font = font;
             this.defaultConfig = Configs.getToggles().get(key);
             this.enable = config.getToggles().get(key).isEnable();
 
             //#if MC > 11902
-            this.text = new TextWidget(Text.literal(key), textRenderer);
-            this.text.setTooltip(Tooltip.of(Text.literal(this.defaultConfig.getNarrator())));
-            //#elseif MC > 11802
-            //$$ this.text = Text.literal(key);
+            this.text = new StringWidget(Component.literal(key), font);
+            this.text.setTooltip(Tooltip.create(Component.literal(this.defaultConfig.getNarrator())));
             //#elseif MC > 11601
-            //$$ this.text = Text.of(key);
-            //#elseif MC > 11502
-            //$$ this.text = Text.method_30163(key);
+            //$$ this.text = Component.literal(key);
             //#else
-            //$$ this.text = new LiteralText(key);
+            //$$ this.text = new TextComponent(key);
             //#endif
 
             //#if MC > 11902
-            this.enableButton = ButtonWidget.builder(Text.literal(this.enable ? "ON" : "OFF").setStyle(Style.EMPTY.withColor(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB())), button -> {
+            this.enableButton = Button.builder(Component.literal(this.enable ? "ON" : "OFF").setStyle(Style.EMPTY.withColor(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB())), button -> {
                 this.enable = !this.enable;
                 FileUtil.updateToggleConfig(key, new JToggleConfig(this.enable));
                 this.update();
             }).size(60, 20).build();
-            this.resetButton = ButtonWidget.builder(Text.literal("RESET"), button -> {
+            this.resetButton = Button.builder(Component.literal("RESET"), button -> {
                 this.enable = this.defaultConfig.isEnable();
                 FileUtil.updateToggleConfig(key, new JToggleConfig(this.enable));
                 this.update();
@@ -365,7 +363,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
         }
 
         @Override
-        public List<? extends Element> children() {
+        public List<? extends GuiEventListener> children() {
             //#if MC > 11902
             return ImmutableList.of(this.text, this.enableButton, this.resetButton);
             //#else
@@ -375,7 +373,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
 
         //#if MC > 11605
         @Override
-        public List<? extends Selectable> selectableChildren() {
+        public List<? extends NarratableEntry> narratables() {
             //#if MC > 11902
             return ImmutableList.of(this.text, this.enableButton, this.resetButton);
             //#else
@@ -384,27 +382,36 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
         }
         //#endif
 
+
+        //#if MC > 260000
         @Override
-        public void render(
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            this.text.setPosition(getX() - 60, getY() + 5);
+            this.text.extractWidgetRenderState(context, mouseX, mouseY, tickDelta);
+            this.enableButton.setPosition(getX() + 190, getY());
+            this.resetButton.setPosition(getX() + 253, getY());
+            this.enableButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.resetButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+        }
+        //#else
+        //$$ @Override
+        //$$ public void renderContent(
                 //#if MC > 11904
-                DrawContext context,
+                //$$ GuiGraphics context,
                 //#elseif MC > 11502
-                //$$ MatrixStack context,
+                //$$ PoseStack context,
                 //#endif
                 //#if MC > 12108
                 //#else
                 //$$ int index, int y, int x, int entryWidth, int entryHeight,
                 //#endif
-                int mouseX, int mouseY, boolean hovered, float tickDelta
-        ) {
+                //$$ int mouseX, int mouseY, boolean hovered, float tickDelta
+        //$$ ) {
             //#if MC > 12108
-            this.text.setPosition(getX() - 60, getY() + 5);
-            this.text.render(context, mouseX, mouseY, tickDelta);
-            //#elseif MC > 11903
-            //$$ this.text.setPosition(x - 60, y + 5);
+            //$$ this.text.setPosition(getX() - 60, getY() + 5);
             //$$ this.text.render(context, mouseX, mouseY, tickDelta);
             //#elseif MC > 11902
-            //$$ this.text.setPos(x - 60, y + 5);
+            //$$ this.text.setPosition(x - 60, y + 5);
             //$$ this.text.render(context, mouseX, mouseY, tickDelta);
             //#elseif MC > 11502
             //$$ this.textRenderer.draw(context, this.text, x - 60, y + 5, Color.WHITE.getRGB());
@@ -413,14 +420,11 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
             //#endif
 
             //#if MC > 12108
-            this.enableButton.setPosition(getX() + 190, getY());
-            this.resetButton.setPosition(getX() + 253, getY());
-            //#elseif MC > 11903
+            //$$ this.enableButton.setPosition(getX() + 190, getY());
+            //$$ this.resetButton.setPosition(getX() + 253, getY());
+            //#elseif MC > 11902
             //$$ this.enableButton.setPosition(x + 190, y);
             //$$ this.resetButton.setPosition(x + 253, y);
-            //#elseif MC > 11902
-            //$$ this.enableButton.setPos(x + 190, y);
-            //$$ this.resetButton.setPos(x + 253, y);
             //#else
             //$$ this.enableButton.x = x + 190;
             //$$ this.enableButton.y = y;
@@ -429,25 +433,22 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
             //#endif
 
             //#if MC > 11502
-            this.enableButton.render(context, mouseX, mouseY, tickDelta);
-            this.resetButton.render(context, mouseX, mouseY, tickDelta);
+            //$$ this.enableButton.render(context, mouseX, mouseY, tickDelta);
+            //$$ this.resetButton.render(context, mouseX, mouseY, tickDelta);
             //#else
             //$$ this.enableButton.render(mouseX, mouseY, tickDelta);
             //$$ this.resetButton.render(mouseX, mouseY, tickDelta);
             //#endif
-        }
+            //$$ }
+        //#endif
 
         @Override
         void update() {
             //this.enableButton.setMessage(Text.literal(this.enable ? "ON" : "OFF").setStyle(Style.EMPTY.withColor(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB())));
             //#if MC > 11605
-            this.enableButton.setMessage(Text.of(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB())));
-            //#elseif MC > 11601
-            //$$ this.enableButton.setMessage(Text.of(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))));
-            //#elseif MC > 11502
-            //$$ this.enableButton.setMessage(Text.method_30163(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB()))));
+            this.enableButton.setMessage(Component.nullToEmpty(this.enable ? "ON" : "OFF").copy().setStyle(Style.EMPTY.withColor(this.enable ? Color.GREEN.getRGB() : Color.red.getRGB())));
             //#else
-            //$$ this.enableButton.setMessage((new LiteralText(this.enable ? "ON" : "OFF").copy().setStyle((new Style()).setColor(this.enable ? Formatting.GREEN : Formatting.RED))).asFormattedString());
+            //$$ this.enableButton.setMessage((new TextComponent(this.enable ? "ON" : "OFF").copy().setStyle((new Style()).setColor(this.enable ? Formatting.GREEN : Formatting.RED))).asFormattedString());
             //#endif
 
             this.resetButton.active = this.defaultConfig.isEnable() != this.enable;
@@ -456,7 +457,7 @@ public class ConfigWidget extends ElementListWidget<ConfigWidget.Entry> {
     }
 
     @Environment(EnvType.CLIENT)
-    public abstract static class Entry extends ElementListWidget.Entry<Entry> {
+    public abstract static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
         public Entry() {
         }
 

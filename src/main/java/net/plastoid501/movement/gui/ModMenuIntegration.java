@@ -28,7 +28,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 //$$ import io.github.prospector.modmenu.api.ModMenuApi;
 //#else
 //$$ import io.github.prospector.modmenu.api.ModMenuApi;
-//$$ import net.minecraft.client.gui.screen.Screen;
+//$$ import net.minecraft.client.gui.screens.Screen;
 //$$ import net.plastoid501.movement.MovementInGUI;
 //$$ import java.util.function.Function;
 //#endif
