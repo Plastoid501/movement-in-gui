@@ -29,11 +29,11 @@ import com.terraformersmc.modmenu.gui.ModsScreen;
 //$$ import io.github.prospector.modmenu.gui.ModListScreen;
 //#endif
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.*;
-import net.minecraft.client.gui.screens.inventory.AnvilScreen;
-import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraft.client.gui.screens.inventory.*;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 
 //#if MC > 11903
 import net.minecraft.client.gui.screens.telemetry.TelemetryInfoScreen;
@@ -59,7 +59,10 @@ import net.minecraft.client.KeyMapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.plastoid501.movement.config.Configs;
+import net.plastoid501.movement.mixin.IAbstractRecipeBookScreenMixin;
+import net.plastoid501.movement.mixin.ICreativeModeInventoryScreen;
 import net.plastoid501.movement.mixin.IKeyBindingMixin;
+import net.plastoid501.movement.mixin.IRecipeBookComponentMixin;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientUtil {
@@ -116,6 +119,31 @@ public class ClientUtil {
         ) {
             return false;
         }
+        //#if MC > 12106
+        if (client.screen instanceof AbstractRecipeBookScreen screen) {
+            RecipeBookComponent<?> recipeBookComponent = ((IAbstractRecipeBookScreenMixin) screen).getRecipeBookComponent();
+            EditBox searchBox = ((IRecipeBookComponentMixin) recipeBookComponent).getSearchBox();
+            if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
+                return false;
+            }
+        }
+        //#else
+        //$$ if (client.screen instanceof InventoryScreen screen) {
+        //$$     RecipeBookComponent recipeBookComponent = ((IAbstractRecipeBookScreenMixin) screen).getRecipeBookComponent();
+        //$$     EditBox searchBox = ((IRecipeBookComponentMixin) recipeBookComponent).getSearchBox();
+        //$$     if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
+        //$$         return false;
+        //$$     }
+        //$$ }
+        //#endif
+
+        if (client.screen instanceof CreativeModeInventoryScreen screen) {
+            EditBox searchBox = ((ICreativeModeInventoryScreen) screen).getSearchBox();
+            if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
+                return false;
+            }
+        }
+
         if (!Configs.inCreative.isEnable() && client.player != null && client.player.isCreative()) {
             return false;
         }

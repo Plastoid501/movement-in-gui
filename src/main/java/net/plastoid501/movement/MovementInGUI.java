@@ -43,7 +43,7 @@ public class MovementInGUI implements ModInitializer
 	//#endif
 
 	public static final String MOD_ID = "movement-in-gui";
-	public static String MOD_VERSION = "1.1.0";
+	public static String MOD_VERSION = "1.1.1";
 	public static String MOD_NAME = "MovementInGUI";
 
 	@Override
