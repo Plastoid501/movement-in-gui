@@ -138,8 +138,8 @@ public class ClientUtil {
             }
         }
         //#else
-        //$$ if (screen instanceof InventoryScreen screen) {
-        //$$     RecipeBookComponent recipeBookComponent = ((IAbstractRecipeBookScreenMixin) screen).getRecipeBookComponent();
+        //$$ if (screen instanceof InventoryScreen inventoryScreen) {
+        //$$     RecipeBookComponent recipeBookComponent = ((IAbstractRecipeBookScreenMixin) inventoryScreen).getRecipeBookComponent();
         //$$     EditBox searchBox = ((IRecipeBookComponentMixin) recipeBookComponent).getSearchBox();
         //$$     if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
         //$$         return false;
