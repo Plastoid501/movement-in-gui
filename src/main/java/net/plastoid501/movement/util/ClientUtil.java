@@ -74,61 +74,71 @@ public class ClientUtil {
             return false;
         }
         Minecraft client = Minecraft.getInstance();
-        if (client.screen == null ||
-                client.screen instanceof BookEditScreen ||
-                client.screen instanceof SignEditScreen ||
-                (client.screen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
-                client.screen instanceof ChatScreen ||
-                client.screen instanceof WinScreen ||
-                client.screen instanceof PauseScreen ||
-                client.screen instanceof StatsScreen ||
-                client.screen instanceof ShareToLanScreen ||
+        Screen screen =
+                //#if MC > 260102
+                client.gui.screen();
+                //#else
+                //$$ client.screen;
+                //#endif
+        if (screen == null ||
+                screen instanceof BookEditScreen ||
+                screen instanceof SignEditScreen ||
+                (screen instanceof AnvilScreen && !Configs.isAnvil.isEnable()) ||
+                screen instanceof ChatScreen ||
+                screen instanceof WinScreen ||
+                screen instanceof PauseScreen ||
+                screen instanceof StatsScreen ||
+                //#if MC > 260102
+                screen instanceof MultiplayerOptionsScreen ||
+                //#else
+                //$$ screen instanceof ShareToLanScreen ||
+                //#endif
 
                 //#if MC > 11904
-                client.screen instanceof TelemetryInfoScreen ||
-                client.screen instanceof CreditsAndAttributionScreen ||
+                screen instanceof TelemetryInfoScreen ||
+                screen instanceof CreditsAndAttributionScreen ||
                 //#endif
 
                 //#if MC > 11404
-                client.screen instanceof OptionsSubScreen ||
+                screen instanceof OptionsSubScreen ||
                 //#else
-                //$$ client.screen instanceof AccessibilityOptionsScreen ||
-                //$$ client.screen instanceof ChatOptionsScreen ||
-                //$$ client.screen instanceof ControlsScreen ||
-                //$$ client.screen instanceof LanguageSelectScreen ||
-                //$$ client.screen instanceof MouseSettingsScreen ||
-                //$$ client.screen instanceof SkinCustomizationScreen ||
-                //$$ client.screen instanceof SoundOptionsScreen ||
+                //$$ screen instanceof AccessibilityOptionsScreen ||
+                //$$ screen instanceof ChatOptionsScreen ||
+                //$$ screen instanceof ControlsScreen ||
+                //$$ screen instanceof LanguageSelectScreen ||
+                //$$ screen instanceof MouseSettingsScreen ||
+                //$$ screen instanceof SkinCustomizationScreen ||
+                //$$ screen instanceof SoundOptionsScreen ||
                 //#endif
 
-                client.screen instanceof OptionsScreen ||
+                screen instanceof OptionsScreen ||
 
-                client.screen instanceof ConfirmLinkScreen ||
+                screen instanceof ConfirmLinkScreen ||
 
                 //#if MC > 11601
-                client.screen instanceof PackSelectionScreen ||
+                screen instanceof PackSelectionScreen ||
                 //#else
-                //$$ client.screen instanceof ResourcePackSelectScreen ||
+                //$$ screen instanceof ResourcePackSelectScreen ||
                 //#endif
 
                 //#if MC > 11501
-                client.screen instanceof ModsScreen
+                screen instanceof ModsScreen
                 //#else
-                //$$ client.screen instanceof ModListScreen
+                //$$ screen instanceof ModListScreen
                 //#endif
         ) {
             return false;
         }
         //#if MC > 12106
-        if (client.screen instanceof AbstractRecipeBookScreen screen) {
-            RecipeBookComponent<?> recipeBookComponent = ((IAbstractRecipeBookScreenMixin) screen).getRecipeBookComponent();
+        if (screen instanceof AbstractRecipeBookScreen abstractRecipeBookScreen) {
+            RecipeBookComponent<?> recipeBookComponent = ((IAbstractRecipeBookScreenMixin) abstractRecipeBookScreen).getRecipeBookComponent();
             EditBox searchBox = ((IRecipeBookComponentMixin) recipeBookComponent).getSearchBox();
             if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
                 return false;
             }
         }
         //#else
-        //$$ if (client.screen instanceof InventoryScreen screen) {
+        //$$ if (screen instanceof InventoryScreen screen) {
         //$$     RecipeBookComponent recipeBookComponent = ((IAbstractRecipeBookScreenMixin) screen).getRecipeBookComponent();
         //$$     EditBox searchBox = ((IRecipeBookComponentMixin) recipeBookComponent).getSearchBox();
         //$$     if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
@@ -137,8 +147,8 @@ public class ClientUtil {
         //$$ }
         //#endif
 
-        if (client.screen instanceof CreativeModeInventoryScreen screen) {
-            EditBox searchBox = ((ICreativeModeInventoryScreen) screen).getSearchBox();
+        if (screen instanceof CreativeModeInventoryScreen creativeModeInventoryScreen) {
+            EditBox searchBox = ((ICreativeModeInventoryScreen) creativeModeInventoryScreen).getSearchBox();
             if (searchBox != null && searchBox.isActive() && searchBox.isFocused()) {
                 return false;
             }

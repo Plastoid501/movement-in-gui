@@ -154,9 +154,15 @@ public class ConfigScreen extends Screen {
     //#if MC > 11502
     @Override
     public void onClose() {
+        //#if MC > 260102
         if (this.minecraft != null) {
-            this.minecraft.setScreen(this.parent);
+            this.minecraft.gui.setScreen(this.parent);
         }
+        //#else
+        //$$ if (this.minecraft != null) {
+        //$$     this.minecraft.setScreen(this.parent);
+        //$$ }
+        //#endif
     }
     //#else
     //$$ @Override

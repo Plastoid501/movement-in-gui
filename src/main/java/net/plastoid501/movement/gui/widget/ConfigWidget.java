@@ -227,7 +227,12 @@ public class ConfigWidget extends ContainerObjectSelectionList<ConfigWidget.Entr
         //#if MC > 260000
         @Override
         public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.text.setPosition(ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, getY() + 5);
+            //#if MC > 260102
+            this.text.setPosition(ConfigWidget.this.client.gui.screen().width / 2 - this.textWidth / 2, getY() + 5);
+            //#else
+            //$$ this.text.setPosition(ConfigWidget.this.client.screen.width / 2 - this.textWidth / 2, getY() + 5);
+            //#endif
+
             this.text.extractWidgetRenderState(context, mouseX, mouseY, tickDelta);
         }
         //#else
